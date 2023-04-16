@@ -30,12 +30,11 @@ const LoginPage = () => {
           password,
         }
       );
-      console.log(response.data);
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userName", response.data.existingUser.username);
       router.push("/staffManagement");
     } catch (error) {
-      console.error(error);
+     alert(error);
       // Handle error, e.g. display error message to user
     }
   };
@@ -49,12 +48,11 @@ const LoginPage = () => {
           password,
         }
       );
-      console.log(response.data);
       // Store token in local storage or state, and navigate to dashboard
       // Example: localStorage.setItem("token", response.data.token);
       //   router.push("/dashboard");
     } catch (error) {
-      console.error(error);
+      alert(error);
       // Handle error, e.g. display error message to user
     }
   };
@@ -71,9 +69,8 @@ const LoginPage = () => {
           newPassword: newPassword, // Replace with actual new password
         }
       );
-      console.log(response.data);
     } catch (error) {
-      console.error(error);
+      alert(error);
       // Handle error, e.g. display error message to user
     }
     setIsChangePassword(!isChangePassWord);
