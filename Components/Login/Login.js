@@ -50,11 +50,10 @@ const LoginPage = () => {
           password,
         }
       );
-      localStorage.setItem("token", response.data.token);
-      localStorage.setItem("userName", response.data.existingUser.username);
       notificationPopUp(`SIGN UP SUCCESSFULLY`, "success", enqueueSnackbar);
       router.push("/staffManagement");
     } catch (error) {
+      console.log(error)
       alert(error);
       // Handle error, e.g. display error message to user
     }
