@@ -9,7 +9,7 @@ import {
   Link,
 } from "@mui/material";
 import { useRouter } from "next/router";
-import Image from "next/image";
+import { useSnackbar } from "notistack";
 
 const LoginPage = () => {
   const router = useRouter();
@@ -20,7 +20,7 @@ const LoginPage = () => {
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [isChangePassWord, setIsChangePassword] = useState(false);
-
+  const { enqueueSnackbar } = useSnackbar();
   const handleLogin = async () => {
     try {
       const response = await axios.post(
@@ -32,9 +32,10 @@ const LoginPage = () => {
       );
       localStorage.setItem("token", response.data.token);
       localStorage.setItem("userName", response.data.existingUser.username);
+      notificationPopUp(`LOG IN SUCCESSFULLY`, "success", enqueueSnackbar);
       router.push("/staffManagement");
     } catch (error) {
-     alert(error);
+      alert(error);
       // Handle error, e.g. display error message to user
     }
   };
@@ -48,9 +49,10 @@ const LoginPage = () => {
           password,
         }
       );
-      // Store token in local storage or state, and navigate to dashboard
-      // Example: localStorage.setItem("token", response.data.token);
-      //   router.push("/dashboard");
+      localStorage.setItem("token", response.data.token);
+      localStorage.setItem("userName", response.data.existingUser.username);
+      notificationPopUp(`SIGN UP SUCCESSFULLY`, "success", enqueueSnackbar);
+      router.push("/staffManagement");
     } catch (error) {
       alert(error);
       // Handle error, e.g. display error message to user
@@ -69,13 +71,25 @@ const LoginPage = () => {
           newPassword: newPassword, // Replace with actual new password
         }
       );
+      notificationPopUp(
+        `PASSWORD CHANGED SUCCESSFULLY`,
+        "success",
+        enqueueSnackbar
+      );
     } catch (error) {
       alert(error);
       // Handle error, e.g. display error message to user
     }
     setIsChangePassword(!isChangePassWord);
   };
-
+  const handleLogInBtn = () => {
+    setIsSignUp(false);
+    setIsChangePassword(false);
+  };
+  const handleSignUpBtn = () => {
+    setIsSignUp(true);
+    setIsChangePassword(false);
+  };
   return (
     <div
       style={{
@@ -157,14 +171,14 @@ const LoginPage = () => {
                     {isSignUp ? (
                       <Typography align="center">
                         Already have an account?{" "}
-                        <Link href="#" onClick={() => setIsSignUp(false)}>
+                        <Link href="#" onClick={() => handleLogInBtn()}>
                           Log In
                         </Link>
                       </Typography>
                     ) : (
                       <Typography align="center">
                         Don't have an account?{" "}
-                        <Link href="#" onClick={() => setIsSignUp(true)}>
+                        <Link href="#" onClick={() => handleSignUpBtn()}>
                           Sign Up
                         </Link>
                       </Typography>
@@ -214,6 +228,20 @@ const LoginPage = () => {
                     >
                       Change Password
                     </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography align="center">
+                      Already have an account?{" "}
+                      <Link href="#" onClick={() => handleLogInBtn()}>
+                        Log In
+                      </Link>
+                    </Typography>
+                    <Typography align="center">
+                      Don't have an account?{" "}
+                      <Link href="#" onClick={() => handleSignUpBtn()}>
+                        Sign Up
+                      </Link>
+                    </Typography>
                   </Grid>
                 </Grid>
               )}
